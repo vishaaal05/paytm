@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "DISABLE_PREVIEW_COMMENTS": "true"
+    }
+  },
+  "middleware": {
+    "disablePreviewComments": true
+  }
+}
