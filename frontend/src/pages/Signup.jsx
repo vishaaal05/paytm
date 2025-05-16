@@ -39,9 +39,10 @@ export const Signup = () => {
     };
 
 
-    return <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 flex justify-center items-center p-4">
+    return <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex justify-center items-center p-4">
         <div className="flex flex-col justify-center w-full max-w-md">
             <div className="rounded-2xl bg-white shadow-xl p-8 space-y-6">
+            
                 <div className="text-center">
  <Heading label={"Sign up"} />
                 </div>
