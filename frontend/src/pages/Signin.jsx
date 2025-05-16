@@ -37,7 +37,10 @@ export const Signin = () => {
         <div className="animate-fade-in">
             <div className="bg-white w-96 rounded-2xl shadow-xl p-8 space-y-6">
                 <img src="wallet.png" alt="Logo" className="h-12 w-12 mx-auto mb-2" />
-                <Heading label={"Welcome Back"} />
+                <div className="text-center">
+   <Heading label={"Welcome Back"} />
+                </div>
+             
                 <SubHeading label={"Sign in to continue to your account"} />
                 <div className="space-y-4">
                     <InputBox 
