@@ -6,37 +6,48 @@ import { BottomWarning } from "../components/BottomWarning";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const validateInputs = () => {
+    if (!username.trim() || !username.includes("@")) {
+      toast.error("Please enter a valid email");
+      return false;
+    }
+    if (!password) {
+      toast.error("Password is required");
+      return false;
+    }
+    return true;
+  };
+
   const handleSignIn = async () => {
+    if (!validateInputs()) return;
+    setLoading(true);
     try {
-      // Make an API call to your backend
       const response = await axios.post(
         "https://simp-a-wallet.onrender.com/api/v1/user/signin",
-        {
-          username,
-          password,
-        }
+        { username, password }
       );
-      // Assuming the response contains a token upon successful login
       localStorage.setItem("token", response.data.token);
-
-      // Navigate to the dashboard
-      // You'll need to import the 'navigate' function from your router library
-      navigate("/dashboard");
+      toast.success("Login successful!");
+      setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
-      // Handle authentication error (e.g., display an alert)
-      console.error("Authentication failed:", error.message);
-      alert("Please fill valid username and password");
+      toast.error("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex justify-center items-center p-4">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="animate-fade-in">
         <div className="bg-white w-96 rounded-2xl shadow-xl p-8 space-y-6">
           <img src="wallet.png" alt="Logo" className="h-12 w-12 mx-auto mb-2" />
@@ -60,7 +71,12 @@ export const Signin = () => {
             />
           </div>
           <div className="pt-2">
-            <Button onClick={handleSignIn} label={"Sign In"} />
+            <Button
+              onClick={handleSignIn}
+              label={loading ? "Signing in..." : "Sign In"}
+              disabled={loading}
+              className={loading ? "opacity-70 cursor-not-allowed" : ""}
+            />
           </div>
           <BottomWarning
             label={"Don't have an account?"}

@@ -6,40 +6,61 @@ import { InputBox } from "../components/InputBox"
 import { SubHeading } from "../components/SubHeading"
 import axios from "axios";
 import { useNavigate } from "react-router-dom"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Signup = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
 
-    const handleSignUp = async () => {
-        try {
-          // Make an API call to your backend
-          const response = await axios.post('https://simp-a-wallet.onrender.com/api/v1/user/signup', {
-            username,
-            firstName,
-            lastName,
-            password
+    const validateInputs = () => {
+        if (!firstName.trim()) {
+            toast.error("First name is required");
+            return false;
+        }
+        if (!lastName.trim()) {
+            toast.error("Last name is required");
+            return false;
+        }
+        if (!username.trim() || !username.includes('@')) {
+            toast.error("Please enter a valid email");
+            return false;
+        }
+        if (password.length < 6) {
+            toast.error("Password must be at least 6 characters");
+            return false;
+        }
+        return true;
+    };
 
-          });
-               // Assuming the response contains a token upon successful login
-        localStorage.setItem('token', response.data.token);
-  
-        // Navigate to the dashboard
-        // You'll need to import the 'navigate' function from your router library
-        navigate('/dashboard');
-      } catch (error) {
-        // Handle authentication error (e.g., display an alert)
-        console.error('Authentication failed:', error.message);
-        alert("Please enter valid details")
-      }
+    const handleSignUp = async () => {
+        if (!validateInputs()) return;
+        setLoading(true);
+        try {
+            const response = await axios.post('https://simp-a-wallet.onrender.com/api/v1/user/signup', {
+                username,
+                firstName,
+                lastName,
+                password
+            });
+            localStorage.setItem('token', response.data.token);
+            toast.success("Signup successful!");
+            setTimeout(() => navigate('/dashboard'), 1000);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Signup failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
 
     return <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex justify-center items-center p-4">
+        <ToastContainer position="top-right" autoClose={3000} />
         <div className="flex flex-col justify-center w-full max-w-md">
             <div className="rounded-2xl bg-white shadow-xl p-8 space-y-6">
             
@@ -75,8 +96,11 @@ export const Signup = () => {
                 <div className="pt-4">
                     <Button 
                         onClick={handleSignUp} 
-                        label={"Sign up"} 
-                        className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90 transition-all duration-200"
+                        label={loading ? "Signing up..." : "Sign up"}
+                        className={`w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:opacity-90 transition-all duration-200 ${
+                            loading ? 'opacity-70 cursor-not-allowed' : ''
+                        }`}
+                        disabled={loading}
                     />
                 </div>
                 <BottomWarning 
