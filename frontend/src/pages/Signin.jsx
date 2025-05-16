@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Signin = () => {
-  const [username, setUsername] = useState("demo@gmail.com");
+  const [username, setUsername] = useState("vishal@gmail.com");
   const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -45,10 +45,26 @@ export const Signin = () => {
     }
   };
 
-  const handleDemoLogin = () => {
+  const handleDemoLogin = async () => {
     setUsername("vishal@gmail.com");
     setPassword("123456");
-    handleSignIn();
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://simp-a-wallet.onrender.com/api/v1/user/signin",
+        {
+          username: "vishal@gmail.com",
+          password: "123456",
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      toast.success("Demo Login successful!");
+      setTimeout(() => navigate("/dashboard"), 1000);
+    } catch (error) {
+      toast.error("Demo login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
