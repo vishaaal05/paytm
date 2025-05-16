@@ -2,8 +2,7 @@ import { Appbar } from "../components/Appbar"
 import { Balance } from "../components/Balance"
 import { Users } from "../components/Users"
 import axios from "axios"
-import { useEffect } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export const Dashboard = () => {
     const [userName, setUserName] = useState('');
@@ -11,6 +10,10 @@ export const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Helper function to extract name from email
+    const getNameFromEmail = (email) => {
+        return email.split('@')[0];
+    };
 
     useEffect(() => {
         const fetchBalance = async () => {
@@ -40,12 +43,11 @@ export const Dashboard = () => {
                 {loading ? 'Loading...' : error ? error : (
                     <div>
                         <div className="font-bold text-lg">
-                            Hello, {userName}
+                            Hello, {getNameFromEmail(userName)}
                         </div>
                         <Balance value={balance.toLocaleString()} />
                     </div>
                 )}
-                {/* {loading ? 'Loading...' : error ? error : <Balance value={balance.toLocaleString()} />} */}
                 <Users />
             </div>
         </div>
