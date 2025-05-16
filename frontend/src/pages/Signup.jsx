@@ -42,7 +42,10 @@ export const Signup = () => {
     return <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 flex justify-center items-center p-4">
         <div className="flex flex-col justify-center w-full max-w-md">
             <div className="rounded-2xl bg-white shadow-xl p-8 space-y-6">
-                <Heading label={"Sign up"} />
+                <div className="text-center">
+ <Heading label={"Sign up"} />
+                </div>
+               
                 <SubHeading label={"Enter your information to create an account"} />
                 <div className="space-y-4">
                     <InputBox 
