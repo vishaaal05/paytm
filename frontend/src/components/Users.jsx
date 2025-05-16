@@ -5,16 +5,44 @@ import { useNavigate } from "react-router-dom";
 
 
 export const Users = () => {
-    // Replace with backend call
     const [users, setUsers] = useState([]);
     const [filter, setFilter] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter)
-            .then(response => {
-                setUsers(response.data.users)
-            })
-    }, [filter])
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get(
+                    `https://simp-a-wallet.onrender.com/api/v1/user/bulk?filter=${filter}`,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                );
+                setUsers(response.data.users);
+                setError(null);
+            } catch (err) {
+                console.error("Failed to fetch users:", err);
+                setError("Failed to load users");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, [filter]);
+
+    if (loading) {
+        return <div className="flex justify-center py-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>;
+    }
+
+    if (error) {
+        return <div className="text-red-500 text-center py-4">{error}</div>;
+    }
 
     return <>
 
