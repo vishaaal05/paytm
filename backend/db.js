@@ -1,7 +1,8 @@
 // import { connect, Schema, model } from "mongoose";
 const { connect, Schema, model } = require("mongoose");
+require('dotenv').config();
 
-connect("mongodb+srv://admin:8wFPzEcfczo1ZFc1@cluster0.qsqaf71.mongodb.net/paytm");
+connect(process.env.MONGODB_URL);
 
 const userSchema = new Schema({
     // username: String,
