@@ -33,18 +33,27 @@ export const Signin = () => {
     }
   };
 
-    return <div className="bg-slate-300 h-screen flex justify-center">
-        <div className="flex flex-col justify-center "  >
-            <div className="bg-white w-80 h-max px-4 rounded-lg text-center p-2">
-                <Heading label={"Sign In"} />
-                <SubHeading label={"Enter your information to create an account"} />
-                <InputBox onChange={e => {
-                    setUsername(e.target.value);
-                }} placeholder="rebuiltx@gmail.com" label={"Email"} />
-                <InputBox onChange={(e) => {
-                    setPassword(e.target.value)
-                }} placeholder="minimum 6 characters" label={"Password"} />
-                <div className="pt-4">
+    return <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex justify-center items-center p-4">
+        <div className="animate-fade-in">
+            <div className="bg-white w-96 rounded-2xl shadow-xl p-8 space-y-6">
+                <img src="wallet.png" alt="Logo" className="h-12 w-12 mx-auto mb-2" />
+                <Heading label={"Welcome Back"} />
+                <SubHeading label={"Sign in to continue to your account"} />
+                <div className="space-y-4">
+                    <InputBox 
+                        onChange={e => setUsername(e.target.value)}
+                        placeholder="Enter your email"
+                        label={"Email"}
+                        type="email"
+                    />
+                    <InputBox 
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="Enter your password"
+                        label={"Password"}
+                        type="password"
+                    />
+                </div>
+                <div className="pt-2">
                     <Button onClick={handleSignIn} label={"Sign In"} />
                 </div>
                 <BottomWarning label={"Don't have an account?"} buttonText={"Sign Up"} to={"/signup"} />
