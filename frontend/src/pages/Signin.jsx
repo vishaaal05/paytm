@@ -10,8 +10,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Signin = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("demo@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -45,6 +45,12 @@ export const Signin = () => {
     }
   };
 
+  const handleDemoLogin = () => {
+    setUsername("vishal@gmail.com");
+    setPassword("123456");
+    handleSignIn();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-white flex justify-center items-center p-4">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -58,25 +64,33 @@ export const Signin = () => {
           <SubHeading label={"Sign in to continue to your account"} />
           <div className="space-y-4">
             <InputBox
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your email"
               label={"Email"}
               type="email"
             />
             <InputBox
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               label={"Password"}
               type="password"
             />
           </div>
-          <div className="pt-2">
+          <div className="space-y-3">
             <Button
               onClick={handleSignIn}
               label={loading ? "Signing in..." : "Sign In"}
               disabled={loading}
               className={loading ? "opacity-70 cursor-not-allowed" : ""}
             />
+            <button
+              onClick={handleDemoLogin}
+              className="w-full py-2 text-sm text-gray-600 hover:text-gray-800"
+            >
+              Use Demo Account
+            </button>
           </div>
           <BottomWarning
             label={"Don't have an account?"}
