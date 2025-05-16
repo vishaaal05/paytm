@@ -16,7 +16,7 @@ export const Signin = () => {
     const handleSignIn = async () => {
       try {
         // Make an API call to your backend
-        const response = await axios.post('http://localhost:3000/api/v1/user/signin', {
+        const response = await axios.post('https://simp-a-wallet.onrender.com/api/v1/user/signin', {
           username,
           password,
         });
