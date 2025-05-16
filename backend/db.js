@@ -1,8 +1,9 @@
-const mongoose = require("mongoose");
+// import { connect, Schema, model } from "mongoose";
+const { connect, Schema, model } = require("mongoose");
 
-mongoose.connect("mongodb+srv://admin:8wFPzEcfczo1ZFc1@cluster0.qsqaf71.mongodb.net/paytm");
+connect("mongodb+srv://admin:8wFPzEcfczo1ZFc1@cluster0.qsqaf71.mongodb.net/paytm");
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     // username: String,
     // password: String,
     // firstname: String,
@@ -37,9 +38,9 @@ const userSchema = new mongoose.Schema({
 });
 
 
-const accountSchema = new mongoose.Schema({
+const accountSchema = new Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, // Reference to User model
+        type: Schema.Types.ObjectId, // Reference to User model
         ref: 'User', // if a user only with some id can put money here
         required: true
     },
@@ -49,8 +50,11 @@ const accountSchema = new mongoose.Schema({
     }
 });
 
-const Account = mongoose.model('Account', accountSchema);
-const User = mongoose.model("User", userSchema);
+// mongoose.model('Account', accountSchema):
+//  This creates a model named Account using the accountSchema. Mongoose will look for a collection named accounts in the database.
+
+const Account = model('Account', accountSchema);  
+const User = model("User", userSchema);
 
 module.exports = {
 	User,

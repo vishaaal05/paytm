@@ -1,22 +1,28 @@
 // backend/routes/user.js
-const express = require('express');
-
+const express = require("express");
 const router = express.Router();
-const zod = require("zod");
-const { User, Account } = require("../db");
-const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("./config");
-const  { authMiddleware } = require("../middleware");
 
-const signupBody = zod.object({
-    username: zod.string().email(),
-	firstName: zod.string(),
-	lastName: zod.string(),
-	password: zod.string()
+const { object, string } = require("zod");
+const { User, Account } = require("../db");
+const { sign } = require("jsonwebtoken");
+const { JWT_SECRET } = require("./config");
+const { authMiddleware } = require("../middleware");
+
+// import { object, string } from "zod";
+// import { User, Account } from "../db";
+// import { sign } from "jsonwebtoken";
+// import { JWT_SECRET } from "./config";
+// import { authMiddleware } from "../middleware";
+
+const signupBody = object({
+    username: string().email(),
+	firstName: string(),
+	lastName: string(),
+	password: string()
 })
 
 router.post("/signup", async (req, res) => {
-    const { success } = signupBody.safeParse(req.body)
+    const { success } = signupBody.safeParse(req.body) // safeParse is a method provided by Zod that validates req.body (the incoming request body) against the signupBody schema.
     if (!success) {
         return res.status(411).json({
             message: "Email already taken / Incorrect inputs"
@@ -46,9 +52,7 @@ router.post("/signup", async (req, res) => {
         balance: 1 + Math.random() * 10000
     })
 
-    const token = jwt.sign({
-        userId
-    }, JWT_SECRET);
+    const token = sign({userId}, JWT_SECRET); // this code takes the userId and some signature as jwt secret code to create token
 
     res.json({
         message: "User created successfully",
@@ -57,9 +61,9 @@ router.post("/signup", async (req, res) => {
 })
 
 
-const signinBody = zod.object({
-    username: zod.string().email(),
-	password: zod.string()
+const signinBody = object({
+    username: string().email(),
+	password: string()
 })
 
 router.post("/signin", async (req, res) => {
@@ -76,9 +80,7 @@ router.post("/signin", async (req, res) => {
     });
 
     if (user) {
-        const token = jwt.sign({
-            userId: user._id
-        }, JWT_SECRET);
+        const token = sign({ userId: user._id}, JWT_SECRET);
   
         res.json({
             token: token
@@ -92,10 +94,10 @@ router.post("/signin", async (req, res) => {
     })
 })
 
-const updateBody = zod.object({
-	password: zod.string().optional(),
-    firstName: zod.string().optional(),
-    lastName: zod.string().optional(),
+const updateBody = object({
+	password: string().optional(),
+    firstName: string().optional(),
+    lastName: string().optional(),
 })
 
 // updating user
